@@ -1,5 +1,5 @@
 /*
- * GreenCoro: A simple and high performance asymmetric corountine
+ * GreenCoro: A simple and high performance asymmetric coroutine
  * 
  * Ontly 6 basic API:
  * co_init()
@@ -114,14 +114,14 @@ typedef struct co_lcdat_type co_lcdat_t;
 
 struct co_context_type
 {
-    co_dlink_t co_dlink; // corountine double link
-    co_state_t co_state; // corountine running state
+    co_dlink_t co_dlink; // coroutine double link
+    co_state_t co_state; // coroutine running state
     co_exenv_t co_exenv; // x86 cpu register
-    co_entry_t co_entry; // corountine startup function
+    co_entry_t co_entry; // coroutine startup function
     co_sefun_t co_sefun; // start and exit function
-    co_lcdat_t co_lcdat; // corountine local data
+    co_lcdat_t co_lcdat; // coroutine local data
     red_zone_t low_zone; // protection zone 
-    stk_zone_t co_stack; // corountine stack
+    stk_zone_t co_stack; // coroutine stack
     red_zone_t hig_zone; // protection zone
 };
 typedef struct co_context_type co_context_t;
@@ -143,9 +143,9 @@ int _co_set_start_exit_func(int co_cid, co_start_t start_fun, co_exit_t exit_fun
 #define co_set_start_exit_func(co_cid, start_fun, exit_fun) _co_set_start_exit_func(co_cid, start_fun, exit_fun)
 
 /* co_init()
- * initialize corountine executing environment 
- * 'max_concur' set the maximal concurency corountines(stack size per corountine is defined by macro 'CORO_STACK_SIZE')
- * 'max_waittm' set the maximal wait time if corountine stay in wait queue, but these timeout corountines will not be deleted immediately 
+ * initialize coroutine executing environment 
+ * 'max_concur' set the maximal concurency coroutines(stack size per coroutine is defined by macro 'CORO_STACK_SIZE')
+ * 'max_waittm' set the maximal wait time if coroutine stay in wait queue, but these timeout coroutines will not be deleted immediately 
  * 'clk_drvmod' set the clock driven mode, 0 use internal clock, and if not 0 you need call 'co_set_clock' to update clock mannually
  * return 0 on success, -1 on error
  * this function should be called in main process
@@ -153,47 +153,47 @@ int _co_set_start_exit_func(int co_cid, co_start_t start_fun, co_exit_t exit_fun
 int co_init(int max_concur, int max_waittm, int clk_drvmod);
 
 /* co_new()
- * create a new corountine
+ * create a new coroutine
  * 'co_fun' set the startup, it's type is 'int (*co_fun_t)(void*)' 
  * 'co_arg' set the argument when call 'co_fun' 
- * the new created corountine will not execute immediately, it need you manually call 'co_resume()'
- * return cid of new corountine, great than 0 on success and -1 on error
+ * the new created coroutine will not execute immediately, it need you manually call 'co_resume()'
+ * return cid of new coroutine, great than 0 on success and -1 on error
  * this function should be called in main process
  */
 int co_new(co_fun_t co_fun, void* co_arg);
 
 /* co_clone()
- * clone a new corountine
- * 'co_cid' is corountine id which you want to clone, this function simply copy the context of corountine 
- * same as 'co_new()', the corountine will not execute immediately
- * return cid of new corountine, great than 0 on success and -1 on error
+ * clone a new coroutine
+ * 'co_cid' is coroutine id which you want to clone, this function simply copy the context of coroutine 
+ * same as 'co_new()', the coroutine will not execute immediately
+ * return cid of new coroutine, great than 0 on success and -1 on error
  */
 int co_clone(int co_cid);
 
 /* co_getcid()
- * get current corountine id
- * return 0 in main process, and great than 0 in corountine
+ * get current coroutine id
+ * return 0 in main process, and great than 0 in coroutine
  */
 int co_getcid();
 
 /* co_resume()
- * resume executing of a corountine
- * 'co_cid' is corountine id which you want to resume
+ * resume executing of a coroutine
+ * 'co_cid' is coroutine id which you want to resume
  * return value listed follow,
- * CORO_SWCTX_PROC: corountine is executing 
- * CORO_SWCTX_FINI: corountine finished
- * CORO_SWCTX_FAIL: corountine is currently unable to resume for some reason
+ * CORO_SWCTX_PROC: coroutine is executing 
+ * CORO_SWCTX_FINI: coroutine finished
+ * CORO_SWCTX_FAIL: coroutine is currently unable to resume for some reason
  * this function should be called in main process
  */
 int co_resume(int co_cid);
 
 /* co_yield()
- * corountine yield the cpu to main process
- * this function should be called in corountine, but not in main process
+ * coroutine yield the cpu to main process
+ * this function should be called in coroutine, but not in main process
  * return value listed follow,
- * CORO_SWCTX_PROC: corountine is executing 
- * CORO_SWCTX_TMOT: corountine wait time out, in this situation, corountine should not call 'co_yield()' any more
- * this function should be called in corountine
+ * CORO_SWCTX_PROC: coroutine is executing 
+ * CORO_SWCTX_TMOT: coroutine wait time out, in this situation, coroutine should not call 'co_yield()' any more
+ * this function should be called in coroutine
  */
 int co_yield();
 
